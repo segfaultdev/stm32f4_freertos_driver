@@ -12,6 +12,7 @@ file(GLOB_RECURSE SOURCES
     ${CMAKE_SOURCE_DIR}/src/*.c
     ${CMAKE_SOURCE_DIR}/src/*.cpp
     ${CMAKE_SOURCE_DIR}/src/*.cc
+    ${CMAKE_SOURCE_DIR}/driver/src/*.c
 )
 
 
@@ -26,8 +27,9 @@ target_sources( ${PROJECT_NAME} PRIVATE
 
 # Include directories
 target_include_directories(${PROJECT_NAME} PUBLIC
-    ${CMAKE_SOURCE_DIR}/Core/CMSIS/Include
-    ${CMAKE_SOURCE_DIR}/Core/CMSIS/Device
+    ${CMAKE_SOURCE_DIR}/core/CMSIS/Include
+    ${CMAKE_SOURCE_DIR}/core/CMSIS/Device
+    ${CMAKE_SOURCE_DIR}/driver/inc
 )
 
 
