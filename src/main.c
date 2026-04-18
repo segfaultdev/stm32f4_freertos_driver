@@ -9,7 +9,7 @@ int main()
     for (;;)
     {
         GPIOA->ODR ^= 1 << 5;
-        for (int i = 0; i < 250000; i++)
+        for (int i = 0; i < 1000000; i++)
             ;
     }
 

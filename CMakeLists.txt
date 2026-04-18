@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.28)
 
-# Include the ARM toolchan
 include(gcc-arm-none-eabi.cmake)
 
 project(freertos LANGUAGES ASM C CXX VERSION 1.0)
@@ -32,13 +31,9 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 )
 
 
-# Compiler definitions
 target_compile_definitions(${PROJECT_NAME} PUBLIC STM32F446xx)
 
-# Set compiler options (e.g., enable debugging)
-# target_compile_options(${PROJECT_NAME} PUBLIC -g)
 
-# Set linker options
 target_link_options(${PROJECT_NAME} PUBLIC 
     -T${LINKER_SCRIPT}
     -Wl,-Map=${PROJECT_NAME}.map
@@ -49,12 +44,16 @@ target_link_options(${PROJECT_NAME} PUBLIC
     -lm
 )
 
-
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_OBJCOPY} -Obinary ${PROJECT_NAME}.elf ${PROJECT_NAME}.bin
 )
 
-add_custom_target(flash 
-    COMMAND st-flash write ${PROJECT_NAME}.bin 0x08000000
-    COMMAND st-flash reset
+add_custom_target(flash
+    DEPENDS ${PROJECT_NAME}
+    COMMAND "${STM32CUBE_PRG}"
+        -c port=SWD
+        mode=UR
+        -w $<TARGET_FILE:${PROJECT_NAME}>
+        -v -rst
+    OUTPUT_QUIET
 )
