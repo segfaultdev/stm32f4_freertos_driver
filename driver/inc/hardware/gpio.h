@@ -69,7 +69,13 @@ typedef struct
     uint8_t AFn; // For AF modes (UART, SPI, etc.)
 } GPIO_Config_t;
 
+err_t GPIO_ClockEnable(GPIO_TypeDef *pGPIO);
+err_t GPIO_ClockDisable(GPIO_TypeDef *pGPIO);
 err_t GPIO_Init(GPIO_TypeDef *pGPIO, const GPIO_Config_t *pConfig);
+err_t GPIO_SetPinLevel(GPIO_TypeDef *pGPIO, uint16_t Pin, uint16_t Level);
+uint32_t GPIO_GetPinLevel(GPIO_TypeDef *pGPIO, uint16_t Pin);
+
+
 err_t GPIO_SetPinMode(GPIO_TypeDef *pGPIO, uint16_t Pin, GPIO_Mode_t Mode);
 err_t GPIO_SetPinPull(GPIO_TypeDef *pGPIO, uint16_t Pin, GPIO_Pupd_t Pull);
 err_t GPIO_SetPinOutputSpeed(GPIO_TypeDef *pGPIO, uint16_t Pin, GPIO_Ospeed_t Speed);

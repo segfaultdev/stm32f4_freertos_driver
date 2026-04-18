@@ -29,3 +29,41 @@ err_t GPIO_Init(GPIO_TypeDef *pGPIO, const GPIO_Config_t *pConfig)
 
     return ERR_OK;
 }
+
+err_t GPIO_ClockEnable(GPIO_TypeDef *pGPIO)
+{
+    uint32_t index = ((uint32_t)pGPIO - (uint32_t)GPIOA) / 0x400U;
+
+    if (index > 7)
+        return ERR_INVALID;
+
+    RCC->AHB1ENR |= (1U << index);
+    return ERR_OK;
+}
+
+err_t GPIO_ClockDisable(GPIO_TypeDef *pGPIO)
+{
+    uint32_t index = ((uint32_t)pGPIO - (uint32_t)GPIOA) / 0x400U;
+
+    if (index > 7)
+        return ERR_INVALID;
+
+    RCC->AHB1ENR &= ~(1U << index);
+    return ERR_OK;
+}
+
+err_t GPIO_SetPinLevel(GPIO_TypeDef *pGPIO, uint16_t Pin, uint16_t Level)
+{
+    if (Level == 1)
+    {
+        pGPIO->BSRR = Pin;
+    }
+    else if (Level == 0)
+    {
+        pGPIO->BSRR = Pin << 16;
+    }
+}
+uint32_t GPIO_GetPinLevel(GPIO_TypeDef *pGPIO, uint16_t Pin)
+{
+    return (pGPIO->IDR & Pin) ? 1 : 0;
+}

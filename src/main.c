@@ -3,7 +3,9 @@
 
 void GPIO_Config(void)
 {
-    RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN;
+
+    GPIO_ClockEnable(GPIOA);
+    GPIO_ClockEnable(GPIOC);
 
     GPIO_Config_t Config;
     Config.Pin = GPIO_PIN_5;
@@ -11,6 +13,11 @@ void GPIO_Config(void)
     Config.Otype = GPIO_OTYPE_PP;
     Config.Ospeed = GPIO_SPEED_VERY_HIGH;
     GPIO_Init(GPIOA, &Config);
+
+    Config.Pin = GPIO_PIN_13;
+    Config.Mode = GPIO_MODE_INPUT;
+    Config.Pull = GPIO_PULL_UP;
+    GPIO_Init(GPIOC, &Config);
 }
 
 void GPIO_IRQ_Init()
@@ -43,9 +50,14 @@ int main()
 
     for (;;)
     {
-        GPIOA->ODR ^= 1 << 5;
-        for (int i = 0; i < 1000000; i++)
-            ;
+        if (!GPIO_GetPinLevel(GPIOC, GPIO_PIN_13))
+        {
+            GPIO_SetPinLevel(GPIOA, GPIO_PIN_5, 1);
+        }
+        else
+        {
+            GPIO_SetPinLevel(GPIOA, GPIO_PIN_5, 0);
+        }
     }
 
     return 0;
