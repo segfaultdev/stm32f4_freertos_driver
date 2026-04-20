@@ -55,6 +55,13 @@ typedef enum
 
 typedef enum
 {
+    GPIO_IT_FTSR = 0x00U,
+    GPIO_IT_RTSR = 0x01U,
+    GPIO_IT_RTFTSR = 0x02U,
+} GPIO_Edge_t;
+
+typedef enum
+{
     GPIO_OTYPE_PP = 0x00, // Push-Pull
     GPIO_OTYPE_OD = 0x01  // Open-Drain
 } GPIO_Otype_t;
@@ -74,11 +81,13 @@ err_t GPIO_ClockDisable(GPIO_TypeDef *pGPIO);
 err_t GPIO_Init(GPIO_TypeDef *pGPIO, const GPIO_Config_t *pConfig);
 err_t GPIO_SetPinLevel(GPIO_TypeDef *pGPIO, uint16_t Pin, uint16_t Level);
 uint32_t GPIO_GetPinLevel(GPIO_TypeDef *pGPIO, uint16_t Pin);
-
+err_t GPIO_AttachInterrupt(GPIO_TypeDef *pGPIO, uint16_t Pin, GPIO_Edge_t Edge);
 
 err_t GPIO_SetPinMode(GPIO_TypeDef *pGPIO, uint16_t Pin, GPIO_Mode_t Mode);
 err_t GPIO_SetPinPull(GPIO_TypeDef *pGPIO, uint16_t Pin, GPIO_Pupd_t Pull);
 err_t GPIO_SetPinOutputSpeed(GPIO_TypeDef *pGPIO, uint16_t Pin, GPIO_Ospeed_t Speed);
 err_t GPIO_SetPinOutputType(GPIO_TypeDef *pGPIO, uint16_t Pin, GPIO_Otype_t Otype);
+
+void GPIO_HandleIRQ(uint16_t Pin);
 
 #endif /* _DRIVER_GPIO_H_ */
